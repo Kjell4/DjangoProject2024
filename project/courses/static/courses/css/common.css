@@ -1,0 +1,13 @@
+.price {
+    font-size: 20px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover; 
+}
+
+.overflow-y-scroll{
+    overflow-y: scroll;
+}

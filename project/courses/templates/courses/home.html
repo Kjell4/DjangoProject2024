@@ -17,7 +17,7 @@
 </style>
 
 <div class="container"></div>
-<h1 class="display-1">Courses</h1>
+<h1 class="display-4">Courses</h1>
 <br>
     <div class="row">
     {% for course in courses%}
@@ -41,7 +41,7 @@
                 <div class="col border-right-1">
                     <a href="" class="btn btn-light btn-block">Enroll Now</a></div>
                 <div class="col border-left-1">
-                    <a href="" class="btn btn-light btn-block">Show More</a></div>
+                    <a href="/course/{{course.slug}}" class="btn btn-light btn-block">Show More</a></div>
             </div>
 
         </div>
