@@ -15,6 +15,30 @@
 
 {% block content %}
 
+
+
+<style>
+.active-video{
+    background-color: rgb(126, 128, 130);
+}
+    a:hover{
+        text-decoration: none;
+    }
+
+    a{
+        color:rgb(61, 59, 59)
+    }
+
+    .active-video-link{
+        color:rgb(206, 202, 196)
+    }
+
+    .active-video-link:hover{
+        text-decoration: none;
+        color:rgb(255, 255, 255)
+    }
+</style>
+
 <div class="container-fluid">
     <div>
         <br>
@@ -32,14 +56,17 @@
                 <!-- Lecture List-->
                 <div class="col-3">
     
-                    <div class="border">
                         <ul id="video_list" class="list-group overflow-y-scroll">
-                            {% for video in course.video_set.all %}
-                                <li class="list-group-item"><a href="?lecture={{video.serial_number}}">{{video}}</a></li>
+                            {% for v in course.video_set.all %}
+                                <li 
+                                class="list-group-item {% if v == video %} active-video  {% endif %} ">
+                                <a class = "{% if v == video %} active-video-link  {% endif %}" href="?lecture={{v.serial_number}}">
+                                    {{v}}
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
-                </div>
             </div>
     
         </div>
