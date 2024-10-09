@@ -11,7 +11,7 @@ Signup
 <h1 class = "display-1">Signup Page</h1>
 
 <div>
-    <form action="/signup/" method="POST">
+    <form method="POST" action="/signup/">
         {% csrf_token %}
         {{form.as_ul}}
 
