@@ -1,0 +1,19 @@
+{% extends 'courses/base.html' %}
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="display-4 alert border text-center">Checkout Page</h1>
+    <hr>
+    <h1>You are going to enroll in {{ course.name }}</h1>
+    <hr>
+    <div>
+        <form method="POST" action="{% url 'product_page' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Pay with Stripe</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

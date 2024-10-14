@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -38,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'courses'
+    'courses',
+    'user_payment.apps.UserPaymentConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,16 @@ MEDIA_ROOT = BASE_DIR
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ 
+
+# STRIPE_PUBLIC_KEY_TEST = os.getenv('pk_test_51Q9oeERtJj59Ssmcft8TbRebrFIRhe8djPEGswMwKGM5VvkcAL7SH1LPB33wHBO7PhOew4ndMQFkFuMLpCKzcscL00n0u0Z3KZ')
+# STRIPE_SECRET_KEY_TEST = os.getenv('sk_test_51Q9oeERtJj59SsmcnvxZlmIooUKmHRgRc7IVwB7PnLkAt3ZVttnAyIfUSnkRzK0E1DRKhKUELBkARbgQxIqX4xkd00KUx1AcR7')
+# STRIPE_WEBHOOK_SECRET_TEST = os.getenv('STRIPE_WEBHOOK_SECRET_TEST')
+# PRODUCT_PRICE = os.getenv('PRODUCT_PRICE')
+
+STRIPE_PUBLIC_KEY_TEST='pk_test_51Q9oeERtJj59Ssmcft8TbRebrFIRhe8djPEGswMwKGM5VvkcAL7SH1LPB33wHBO7PhOew4ndMQFkFuMLpCKzcscL00n0u0Z3KZ'
+STRIPE_SECRET_KEY_TEST='sk_test_51Q9oeERtJj59SsmcnvxZlmIooUKmHRgRc7IVwB7PnLkAt3ZVttnAyIfUSnkRzK0E1DRKhKUELBkARbgQxIqX4xkd00KUx1AcR7'
+STRIPE_WEBHOOK_SECRET_TEST='STRIPE_WEBHOOK_SECRET_TEST'
+PRODUCT_PRICE= 'price_1Q9pqmRtJj59SsmcdpFPW87j'
+REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
