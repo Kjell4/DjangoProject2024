@@ -1,5 +1,5 @@
 from django.contrib import admin
-from courses.models import Course, Tag, Prerequesite, Learning, Video
+from courses.models import Course, UserCourse, Tag, Prerequesite, Learning, Video
 
 class TagAdmin(admin.TabularInline):
     model = Tag
@@ -18,5 +18,6 @@ class CourseAdmin(admin.ModelAdmin):
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Video)
+admin.site.register(UserCourse)
 
 
