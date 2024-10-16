@@ -3,39 +3,54 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from courses.models import Course
 from user_payment.models import UserPayment
 import stripe
 import time
 
 
 @login_required(login_url='login')
-def product_page(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
-	if request.method == 'POST':
-		checkout_session = stripe.checkout.Session.create(
-			payment_method_types = ['card'],
-			line_items = [
-				{
-					'price': settings.PRODUCT_PRICE,
-					'quantity': 1,
-				},
-			],
-			mode = 'payment',
-			customer_creation = 'always',
-			success_url = settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-			cancel_url = settings.REDIRECT_DOMAIN + '/payment_cancelled',
-		)
-		return redirect(checkout_session.url, code=303)
-	return render(request, 'user_payment/product_page.html')
+def product_page(request, slug):
+    stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+    course = Course.objects.get(slug=slug)
+
+    if request.method == 'POST':
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': settings.PRODUCT_PRICE,  # Не забудьте установить цену для курса
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            customer_creation='always',
+            success_url=settings.REDIRECT_DOMAIN + f'/payment_successful?session_id={{CHECKOUT_SESSION_ID}}&course_id={course.id}',
+            cancel_url=settings.REDIRECT_DOMAIN + '/payment_cancelled',
+        )
+        return redirect(checkout_session.url, code=303)
+
+    return render(request, 'user_payment/product_page.html', {'course': course})
 
 
 ## use Stripe dummy card: 4242 4242 4242 4242
 def payment_successful(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
-    checkout_session_id = request.GET.get('session_id', None)
+    checkout_session_id = request.GET.get('session_id')
+    course_id = request.GET.get('course_id')
+    
     session = stripe.checkout.Session.retrieve(checkout_session_id)
     customer = stripe.Customer.retrieve(session.customer)
-
+    
+    # Создаем запись о платеже
+    course = Course.objects.get(id=course_id)
+    UserPayment.objects.create(
+        app_user=request.user,
+        course=course,
+        stripe_checkout_id=checkout_session_id,
+        payment_bool=True
+    )
+    
     return render(request, 'courses/payment_successful.html', {'customer': customer})
 
 
