@@ -5,13 +5,15 @@ from courses.views import home, coursePage, SignupView, LoginView, signout, chec
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
+from . import views
+
 
 urlpatterns = [
     path('', home, name = 'home'),
     path('logout/', signout, name = 'logout'),
     path('signup/', SignupView.as_view(), name = 'signup'),
     path('login/', LoginView.as_view(), name = 'login'),
-    path('course/<str:slug>', coursePage, name = 'coursepage'),
+    path('course/<slug:slug>/', views.coursePage, name='course_page'),
     path('check-out/<str:slug>', checkout, name = 'checkpage'),
     path('payments/', include('user_payment.urls')),
 ] 

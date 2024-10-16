@@ -13,13 +13,17 @@ import time
 def product_page(request, slug):
     stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
     course = Course.objects.get(slug=slug)
+    has_purchased = UserPayment.objects.filter(app_user=request.user, course=course, payment_bool=True).exists()
+	
+    if has_purchased:
+        return render(request, 'user_payment/already_purchased.html', {'course': course})
 
     if request.method == 'POST':
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
                 {
-                    'price': settings.PRODUCT_PRICE,  # Не забудьте установить цену для курса
+                    'price': settings.PRODUCT_PRICE,
                     'quantity': 1,
                 },
             ],
