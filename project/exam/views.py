@@ -13,7 +13,6 @@ def take_test(request, slug):
 
     video = get_object_or_404(Video, serial_number=serial_number, course=course)
 
-
     questions = video.questions.all()
 
     if not questions.exists():
@@ -37,7 +36,6 @@ def take_test(request, slug):
                 if is_correct:
                     score += 1
 
-
                 UserAnswer.objects.create(
                     user=request.user,
                     question=question,
@@ -45,9 +43,12 @@ def take_test(request, slug):
                     is_correct=is_correct
                 )
 
-        final_score = (score / total_questions) 
-        return render(request, 'exam/results.html', {'score': final_score, 'total': total_questions})
-
+        result_message = f"{score} из {total_questions}"
+        return render(request, 'exam/results.html', {
+            'score': score,
+            'total': total_questions,
+             'course': course  
+    })
     return render(request, 'exam/take_test.html', {
         'course': course,
         'video': video,
