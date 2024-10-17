@@ -8,16 +8,16 @@
             <div class="mb-4">
                 <p>{{ question.question_text }}</p>
                 <label>
-                    <input type="radio" name="{{ question.id }}" value="1"> {{ question.answer.option_1 }}
+                    <input type="radio" name="{{ question.id }}" value="1"> {{ question.option_1 }}
                 </label><br>
                 <label>
-                    <input type="radio" name="{{ question.id }}" value="2"> {{ question.answer.option_2 }}
+                    <input type="radio" name="{{ question.id }}" value="2"> {{ question.option_2 }}
                 </label><br>
                 <label>
-                    <input type="radio" name="{{ question.id }}" value="3"> {{ question.answer.option_3 }}
+                    <input type="radio" name="{{ question.id }}" value="3"> {{ question.option_3 }}
                 </label><br>
                 <label>
-                    <input type="radio" name="{{ question.id }}" value="4"> {{ question.answer.option_4 }}
+                    <input type="radio" name="{{ question.id }}" value="4"> {{ question.option_4 }}
                 </label>
             </div>
         {% endfor %}
