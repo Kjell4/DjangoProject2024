@@ -1,0 +1,27 @@
+{% extends 'courses/base.html' %}
+{% block content %}
+<div class="container mt-3">
+    <h5>Тест для видео: {{ video.title }}</h5>
+    <form method="post">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div class="mb-4">
+                <p>{{ question.question_text }}</p>
+                <label>
+                    <input type="radio" name="{{ question.id }}" value="1"> {{ question.answer.option_1 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="{{ question.id }}" value="2"> {{ question.answer.option_2 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="{{ question.id }}" value="3"> {{ question.answer.option_3 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="{{ question.id }}" value="4"> {{ question.answer.option_4 }}
+                </label>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Отправить тест</button>
+    </form>
+</div>
+{% endblock %}

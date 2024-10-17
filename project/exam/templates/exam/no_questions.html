@@ -1,0 +1,10 @@
+<!-- exam/templates/exam/no_questions.html -->
+{% extends 'courses/base.html' %}
+
+{% block content %}
+<div class="container mt-3">
+    <h5>Тест для видео: {{ video.title }}</h5>
+    <p>К сожалению, для этого урока нет вопросов.</p>
+    <a href="{% url 'course_page' course.slug %}">Вернуться к курсу</a>
+</div>
+{% endblock %}
