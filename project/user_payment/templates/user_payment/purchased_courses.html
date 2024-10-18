@@ -1,0 +1,14 @@
+{% block content %}
+<h1>My Courses</h1>
+
+{% if courses %}
+    <ul>
+        {% for course in courses %}
+            <li><a href="/course/{{course.slug}}">{{course}}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас нет купленных курсов.</p>
+{% endif %}
+
+{% endblock %}

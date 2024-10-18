@@ -23,7 +23,7 @@ def product_page(request, slug):
             payment_method_types=['card'],
             line_items=[
                 {
-                    'price': settings.PRODUCT_PRICE,
+                    'price': course.product_id,
                     'quantity': 1,
                 },
             ],
@@ -35,6 +35,17 @@ def product_page(request, slug):
         return redirect(checkout_session.url, code=303)
 
     return render(request, 'user_payment/product_page.html', {'course': course})
+
+
+@login_required(login_url='login')
+def purchased_courses(request):
+    purchased_courses = UserPayment.objects.filter(app_user=request.user, payment_bool=True).select_related('course')
+    
+    # Передаем список курсов в шаблон
+    courses = [payment.course for payment in purchased_courses]
+    
+    
+    return render(request, 'user_payment/purchased_courses.html', {'courses': courses})
 
 
 ## use Stripe dummy card: 4242 4242 4242 4242

@@ -14,7 +14,6 @@ class Video(models.Model):
     video_id = models.CharField(max_length = 20, null = False)
     is_preview = models.BooleanField(default = False)
     video_url = models.CharField(max_length = 100, null = False)        # Custom field from Iliyas
-    lesson = models.ForeignKey(Lesson, null=True, on_delete=models.SET_NULL)  # Связь с моделью Lesson
 
     def __str__(self):
         return self.title

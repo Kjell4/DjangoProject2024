@@ -11,6 +11,7 @@ class Course(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     resource = models.FileField(upload_to = "files/resource")
     length = models.IntegerField(null = False)
+    product_id = models.CharField (max_length = 200, null = False)
 
     def __str__(self):
         return self.name
