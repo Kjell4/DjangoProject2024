@@ -49,7 +49,7 @@
         }
         .course-image {
             width: 100%;
-            height: 200px;
+            height: 300px;
             background-size: cover;
             background-position: center;
         }
@@ -91,8 +91,8 @@
     <div class="course-list">
         {% for course in courses %}
         <div class="course-card">
-            <!-- Course Image: Replace with actual course image URL if available -->
-            <div class="course-image" style="background-image: url('/static/images/default_course_image.jpg');"></div>
+            <!-- Course Image: Now dynamically retrieves the thumbnail URL -->
+            <div class="course-image" style="background-image: url('{{ course.thumbnail.url }}');"></div>
             <div class="course-info">
                 <h3>{{ course.name }}</h3>
                 <p>{{ course.description }}</p>
@@ -105,3 +105,4 @@
 
 </body>
 </html>
+

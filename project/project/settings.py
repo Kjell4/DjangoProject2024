@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'courses',
-    'user_profile',
     'exam',
     'user_payment.apps.UserPaymentConfig',
     'user_profile',
