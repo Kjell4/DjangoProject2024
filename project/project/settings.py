@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'courses',
     'exam',
     'user_payment.apps.UserPaymentConfig',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
