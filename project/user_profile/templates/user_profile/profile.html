@@ -1,0 +1,19 @@
+<!-- user_profile/templates/user_profile/profile.html -->
+<h1>{{ request.user.username }}'s Profile</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        {{ user_form.as_p }}
+    </div>
+    <div>
+        {{ profile_form.as_p }}
+    </div>
+    <button type="submit">Update Profile</button>
+</form>
+
+<h3>Profile Information:</h3>
+<p><strong>Username:</strong> {{ request.user.username }}</p>
+<p><strong>Email:</strong> {{ request.user.email }}</p>
+<p><strong>Bio:</strong> {{ request.user.profile.bio }}</p>
+
