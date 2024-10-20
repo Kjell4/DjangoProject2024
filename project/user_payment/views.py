@@ -9,6 +9,12 @@ import stripe
 import time
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import Review
+from .forms import ReviewForm
+
+
+
 @login_required(login_url='login')
 def product_page(request, slug):
     stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
@@ -41,12 +47,26 @@ def product_page(request, slug):
 def purchased_courses(request):
     purchased_courses = UserPayment.objects.filter(app_user=request.user, payment_bool=True).select_related('course')
     
-    # Передаем список курсов в шаблон
     courses = [payment.course for payment in purchased_courses]
-    
-    
-    return render(request, 'user_payment/purchased_courses.html', {'courses': courses})
+    reviews = {course.slug: Review.objects.filter(course=course) for course in courses}  # Получаем отзывы для каждого курса
 
+    if request.method == 'POST':
+        for course in courses:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review = form.save(commit=False)
+                review.user = request.user
+                review.course = course
+                review.save()
+                return redirect('purchased_courses')  # Перенаправляем на ту же страницу после отправки
+
+    forms = {course.slug: ReviewForm() for course in courses}  # Создаем формы для каждого курса
+
+    return render(request, 'user_payment/purchased_courses.html', {
+        'courses': courses,
+        'reviews': reviews,
+        'forms': forms,
+    })
 
 ## use Stripe dummy card: 4242 4242 4242 4242
 def payment_successful(request):
@@ -98,3 +118,77 @@ def stripe_webhook(request):
 		user_payment.payment_bool = True
 		user_payment.save()
 	return HttpResponse(status=200)
+
+
+
+
+
+
+
+@login_required
+def create_review(request, course_slug):
+    user_payment = get_object_or_404(UserPayment, app_user=request.user, course__slug=course_slug, payment_bool=True)
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.course = user_payment.course
+            review.user_payment = user_payment
+            review.save()
+            return redirect('purchased_courses') 
+    else:
+        form = ReviewForm()
+
+    return render(request, 'user_payment/review_form.html', {'form': form, 'course': user_payment.course})
+
+@login_required
+def update_review(request, course_slug):
+    review_id = request.GET.get('review_id')  
+    reviews = Review.objects.filter(user=request.user, course__slug=course_slug)
+
+    if review_id:
+        review = get_object_or_404(Review, id=review_id, user=request.user)
+    elif reviews.count() == 1:
+        review = reviews.first()  
+    else:
+        return render(request, 'user_payment/select_review.html', {'reviews': reviews, 'course_slug': course_slug})
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('purchased_courses')
+    else:
+        form = ReviewForm(instance=review)
+
+    return render(request, 'user_payment/review_form.html', {'form': form, 'course': review.course})
+
+
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg
+from .models import Course, Review
+
+def review_list(request, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+    reviews = Review.objects.filter(course=course)
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg'] 
+    average_rating = round(average_rating, 2) if average_rating else "No ratings yet"
+    
+    return render(request, 'user_payment/review_list.html', {
+        'course': course,
+        'reviews': reviews,
+        'average_rating': average_rating,  
+    })
+
+@login_required
+def delete_review(request, course_slug, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == 'POST':
+        review.delete()
+        return redirect('list_reviews', course_slug=course_slug) 
+
+    return render(request, 'user_payment/review_confirm_delete.html', {'review': review, 'course': course})

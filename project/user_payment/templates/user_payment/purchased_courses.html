@@ -74,9 +74,13 @@
             text-decoration: none;
             border-radius: 6px;
             transition: background-color 0.3s;
+            margin-right: 10px; /* Отступ между кнопками */
         }
         .btn:hover {
             background-color: #0056b3;
+        }
+        .review-buttons {
+            margin-top: 15px; /* Отступ сверху для группы кнопок */
         }
     </style>
 </head>
@@ -91,12 +95,16 @@
     <div class="course-list">
         {% for course in courses %}
         <div class="course-card">
-            <!-- Course Image: Now dynamically retrieves the thumbnail URL -->
             <div class="course-image" style="background-image: url('{{ course.thumbnail.url }}');"></div>
             <div class="course-info">
                 <h3>{{ course.name }}</h3>
                 <p>{{ course.description }}</p>
                 <a href="{% url 'course_page' course.slug %}" class="btn">Go to Course</a>
+
+                <div class="review-buttons">
+                    <a href="{% url 'create_review' course.slug %}" class="btn">Leave a Review</a>
+                    <a href="{% url 'list_reviews' course.slug %}" class="btn">View Reviews</a>
+                </div>
             </div>
         </div>
         {% endfor %}
@@ -105,4 +113,3 @@
 
 </body>
 </html>
-
