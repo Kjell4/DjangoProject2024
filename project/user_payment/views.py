@@ -7,8 +7,9 @@ from courses.models import Course
 from user_payment.models import UserPayment
 import stripe
 import time
-
-
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg
+from .models import Course, Review
 from django.shortcuts import render, get_object_or_404
 from .models import Review
 from .forms import ReviewForm
