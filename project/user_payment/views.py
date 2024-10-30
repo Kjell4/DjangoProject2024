@@ -166,11 +166,6 @@ def update_review(request, course_slug):
 
     return render(request, 'user_payment/review_form.html', {'form': form, 'course': review.course})
 
-
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Avg
-from .models import Course, Review
-
 def review_list(request, course_slug):
     course = get_object_or_404(Course, slug=course_slug)
     reviews = Review.objects.filter(course=course)

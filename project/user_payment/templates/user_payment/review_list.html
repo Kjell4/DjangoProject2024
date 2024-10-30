@@ -110,8 +110,11 @@
                 <p><strong>Date created:</strong> {{ review.created_at|date:"F d, Y H:i" }}</p>
                 {% if review.updated_at and review.updated_at > review.created_at %}
                 <p class="date"><strong>Last updated:</strong> {{ review.updated_at|date:"F d, Y H:i" }}<span class="edited"> (edited)</span></p>
-            {% endif %}
-                <a href="{% url 'delete_review' course.slug review.id %}" class="btn">Delete</a>
+                {% endif %}
+                {% if review.user == request.user %}
+                    <a href="{% url 'update_review' course.slug %}" class="btn" style="background-color: #3498db; margin-right: 10px;">Update</a>
+                    <a href="{% url 'delete_review' course.slug review.id %}" class="btn">Delete</a>
+                {% endif %}
             </div>
         {% empty %}
             <p>No reviews for this course yet.</p>
