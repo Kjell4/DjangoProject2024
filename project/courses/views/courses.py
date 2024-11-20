@@ -44,7 +44,6 @@ def final_test_page(request, slug):
     user_course, created = UserCourse.objects.get_or_create(user=request.user, course=course)
     if user_course.completed:
         return redirect('course_page', slug=course.slug)
-    # Define sample questions with multiple choice options based on the course name
     questions = {}
     if course.name == "Python for Beginners":
         questions = {
@@ -222,7 +221,7 @@ def final_test_page(request, slug):
             context = {
                 'course': course,
                 'questions': questions,
-                'error_message': 'Вы не набрали минимальный балл (70). Попробуйте снова.'
+                'error_message': 'You have not scored the minimum score (70). Try again.'
             }
             return render(request, 'courses/final_test.html', context)
 

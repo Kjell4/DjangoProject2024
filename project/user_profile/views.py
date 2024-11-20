@@ -53,7 +53,7 @@ def get_certificate(request, course_name, user_id):
     user = user_course.user
     certificate_info = {
         'course_name': user_course.course.name,
-        'completion_date': user_course.date.strftime('%d %B %Y'),  # Изменен формат даты
+        'completion_date': user_course.date.strftime('%d %B %Y'),  # The date format has been changed
         'username': user.username
     }
 
@@ -151,12 +151,10 @@ def replace_text_in_pdf(input_path, output_path, replacements):
                     fontsize -= 1
                     print(f"Reduced fontsize to {fontsize} for '{new_text}'")
 
-        # Replace text for each placeholder with specified replacement values and minimal padding for DATE
         replace_text("NAME SURNAME", replacements["name"], initial_fontsize=20, fontname="notos", padding=5, y_offset=0, additional_width=100)
         replace_text("Course Name.", replacements["coursename"], initial_fontsize=15, fontname="notos", padding=30, y_offset=30, additional_width=150)
         replace_text("DATE", replacements["date"], initial_fontsize=8, fontname="notos", padding=2, y_offset=-5, additional_width=10)
 
-    # Save the modified PDF
     document.save(output_path)
     print(f"Saved modified PDF to: {output_path}")
     document.close()
