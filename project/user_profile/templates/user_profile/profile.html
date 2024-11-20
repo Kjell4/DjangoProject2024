@@ -25,12 +25,27 @@
             <button type="submit" class="btn btn-update">Update Profile</button>
         </form>
 
-        <div class="profile-info">
+            <div class="profile-info">
             <h3>Profile Information:</h3>
             <p><strong>Username:</strong> {{ request.user.username }}</p>
             <p><strong>Email:</strong> {{ request.user.email }}</p>
             <p><strong>Bio:</strong> {{ request.user.profile.bio }}</p>
+
+            <h4>Сертификаты:</h4>
+           {% if certificates %}
+                {% for certificate in certificates %}
+                    <div class="certificate">
+                        <p>Курс: {{ certificate.course_name }}</p>
+                        <p>Дата завершения: {{ certificate.completion_date }}</p>
+                        <a href="{% url 'get_certificate' certificate.course_name request.user.id %}" class="btn btn-primary">Получить сертификат</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>У вас пока нет сертификатов.</p>
+            {% endif %}
+
         </div>
+
     </div>
 </body>
 </html>
