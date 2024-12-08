@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+#from user_profile.models import CustomUser
 from courses.models import Course
 
 

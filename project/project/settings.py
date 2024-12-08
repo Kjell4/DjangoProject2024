@@ -40,11 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user_profile',
     'courses',
     'exam',
     'user_payment.apps.UserPaymentConfig',
-    'user_profile',
+    'teacher',
+    
 ]
+
+#AUTH_USER_MODEL = 'user_profile.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -144,3 +148,4 @@ STRIPE_SECRET_KEY_TEST='sk_test_51Q9oeERtJj59SsmcnvxZlmIooUKmHRgRc7IVwB7PnLkAt3Z
 STRIPE_WEBHOOK_SECRET_TEST='STRIPE_WEBHOOK_SECRET_TEST'
 # PRODUCT_PRICE= 'price_1Q9pqmRtJj59SsmcdpFPW87j'
 REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
+#LOGIN_REDIRECT_URL = '/'

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Course(models.Model):
     name = models.CharField(max_length = 50, null = False)
     slug = models.CharField(max_length = 50, null = False, unique = True)
@@ -12,6 +13,7 @@ class Course(models.Model):
     resource = models.FileField(upload_to = "files/resource")
     length = models.IntegerField(null = False)
     product_id = models.CharField (max_length = 200, null = False)
+    
 
     def __str__(self):
         return self.name

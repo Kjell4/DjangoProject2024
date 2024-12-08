@@ -1,6 +1,8 @@
 from django.db import models
 from courses.models import Video
 from django.contrib.auth.models import User
+#from user_profile.models import CustomUser
+
 
 class Question(models.Model):
     question_text = models.CharField(max_length=255)

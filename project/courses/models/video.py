@@ -13,7 +13,7 @@ class Video(models.Model):
     serial_number = models.IntegerField(null = False)
     video_id = models.CharField(max_length = 20, null = False)
     is_preview = models.BooleanField(default = False)
-    video_url = models.CharField(max_length = 100, null = False)        # Custom field from Iliyas
+    video_url = models.CharField(max_length = 100, null = False) 
 
     def __str__(self):
         return self.title

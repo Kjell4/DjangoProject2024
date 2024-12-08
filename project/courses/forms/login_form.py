@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+#from user_profile.models import CustomUser
 from django import forms
 from django.forms import ValidationError
 from django.contrib.auth import authenticate, login
