@@ -5,7 +5,20 @@ from django.urls import reverse
 from exam.models import TestResult
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from courses.serializers import CourseSerializer
+from rest_framework.permissions import AllowAny
 
+class CourseListView(APIView):
+    def get(self, request):
+        try:
+            courses = Course.objects.all()
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @login_required(login_url='login')
 def coursePage(request, slug):
