@@ -10,13 +10,25 @@ import time
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Avg
 from .models import Course, Review
-from django.shortcuts import render, get_object_or_404
-from .models import Review
 from .forms import ReviewForm
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
+product_slug_param = openapi.Parameter(
+    'slug', openapi.IN_PATH, description="The slug of the course", type=openapi.TYPE_STRING
+)
+
+# Add Swagger documentation to 'product_page'
+# @swagger_auto_schema(
+#     manual_parameters=[product_slug_param], 
+#     responses={200: 'Course information', 400: 'Invalid request'}
+# )
 
 
 @login_required(login_url='login')
+
 def product_page(request, slug):
     stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
     course = Course.objects.get(slug=slug)
@@ -70,6 +82,11 @@ def purchased_courses(request):
     })
 
 ## use Stripe dummy card: 4242 4242 4242 4242
+@swagger_auto_schema(
+    method='get',  
+    responses={200: 'Payment successful response', 400: 'Invalid request'}
+)
+@api_view(['GET'])
 def payment_successful(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
     checkout_session_id = request.GET.get('session_id')
@@ -96,6 +113,11 @@ def payment_cancelled(request):
 	return render(request, 'courses/payment_cancelled.html')
 
 
+# @swagger_auto_schema(
+#     method='post',
+#     responses={200: 'Webhook received successfully', 400: 'Bad request'}
+# )
+# @api_view(['POST'])
 @csrf_exempt
 def stripe_webhook(request):
 	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
@@ -120,13 +142,16 @@ def stripe_webhook(request):
 		user_payment.save()
 	return HttpResponse(status=200)
 
-
-
-
-
-
+@swagger_auto_schema(
+    method='post',
+    manual_parameters=[
+        openapi.Parameter('course_slug', openapi.IN_PATH, description="Course slug", type=openapi.TYPE_STRING)
+    ],
+    responses={200: 'Review created successfully', 400: 'Invalid request'}
+)
 
 @login_required
+@api_view(['POST'])
 def create_review(request, course_slug):
     user_payment = get_object_or_404(UserPayment, app_user=request.user, course__slug=course_slug, payment_bool=True)
 
