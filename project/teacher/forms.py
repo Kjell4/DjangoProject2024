@@ -16,7 +16,8 @@ class TeacherProfileForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['name', 'description']
+        fields = ['name', 'slug', 'description', 'price', 'discount', 'active',
+            'thumbnail', 'resource', 'length', 'product_id']
 
 # class AddStudentForm(forms.Form):
 #     student = forms.ModelChoiceField(queryset=User.objects.all(), label="Student")

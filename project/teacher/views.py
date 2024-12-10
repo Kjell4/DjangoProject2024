@@ -18,7 +18,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import logging
+from django.utils.text import slugify
 
+logger = logging.getLogger(__name__)
 # class TeacherView(APIView):
 #     permission_classes = [IsAuthenticated]
 
@@ -48,7 +51,7 @@ def teacher_dashboard(request):
     responses={200: openapi.Response('Edit Teacher Profile', schema=TeacherSerializer)},
     operation_description="Edit teacher profile information"
 )
-@api_view(['PUT'])
+@api_view(['GET','PUT'])
 def edit_teacher_profile(request):
     teacher = get_object_or_404(Teacher, user=request.user)
     if request.method == 'POST':
@@ -125,7 +128,7 @@ def course_students_stats(request, course_id):
     responses={200: openapi.Response('Student Added to Course')},
     operation_description="Add a student to a course"
 )
-@api_view(['POST'])
+@api_view(['GET','POST'])
 def add_student_to_course(request):
     teacher = Teacher.objects.get(user=request.user)
     if request.method == 'POST':
@@ -198,22 +201,56 @@ class CustomLoginView(LoginView):
 @swagger_auto_schema(
     method='post',
     request_body=CourseCreateSerializer,
-    responses={200: openapi.Response('Course Created')},
+    responses={201: openapi.Response('Course Created')},
     operation_description="Create a new course"
 )
-@api_view(['POST'])
-@login_required
+@api_view(['GET','POST'])
+
+# def create_course(request):
+#     if request.method == 'POST':
+#         form = CourseForm(request.POST)
+#         if form.is_valid():
+#             course = form.save(commit=False)
+#             course.teacher = request.user  
+#             course.save()
+#             return redirect('course_list')
+#     else:
+#         form = CourseForm()
+#     return render(request, 'teacher/create_course.html', {'form': form})
+
 def create_course(request):
     if request.method == 'POST':
-        form = CourseForm(request.POST)
+        form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
-            course = form.save(commit=False)
-            course.teacher = request.user  
-            course.save()
-            return redirect('course_list')
-    else:
-        form = CourseForm()
+            try:
+                course = form.save(commit=False)
+                course.teacher = request.user
+                if not course.slug:
+                    course.slug = slugify(course.name)
+                course.save()
+                logger.info(f"Course created: {course.name}")
+                return redirect(' ')
+            except Exception as e:
+                logger.error(f"Error creating course: {e}")
+        else:
+            logger.warning(f"Form is invalid: {form.errors}")
+    form = CourseForm()
     return render(request, 'teacher/create_course.html', {'form': form})
+# def create_course(request):
+#     if request.method == 'POST':
+#         form = CourseForm(request.POST, request.FILES)
+        
+#         if form.is_valid():
+#             course = form.save(commit=False)
+#             course.teacher = request.user
+#             course.save()
+            
+#             return redirect('')
+        
+#         return render(request, 'teacher/create_course.html', {'form': form,'errors': form.errors})
+#     else:
+#         form = CourseForm()
+#     return render(request, 'teacher/create_course.html', {'form': form})
 
 # from django.shortcuts import render, redirect, get_object_or_404
 # from django.contrib.auth.decorators import login_required
