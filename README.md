@@ -1,8 +1,8 @@
-<strong>Instruction for installation</strong>
+<h1>Instruction for installation</h1>
 
 git clone https://github.com/Kjell4/DjangoProject2024
 
-<h1>Libraries:</h1>
+<h2>Libraries:</h2>
 
 pip install...
 aiofiles==24.1.0
@@ -62,7 +62,7 @@ tzdata==2024.2
 urllib3==2.2.3
 uvicorn==0.32.0
 
-<h1>Running:</h1>
+<h2>Running:</h2>
 project/python manage.py runserver
 
 Go to http://127.0.0.1:8000/ in your browser
